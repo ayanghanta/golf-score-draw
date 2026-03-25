@@ -1,6 +1,9 @@
 "use client";
+import CharitiCard from "@/components/ui/CharitiCard";
+import { getAllCharities } from "@/services/apiCharities";
+import { MAX_DONATION, MIN_DONATION } from "@/utils/constants";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PiArrowLeftBold,
   PiCheckCircleFill,
@@ -10,36 +13,44 @@ import {
   PiHandHeartFill,
 } from "react-icons/pi";
 
+const DUMMY_CHARITIES = [
+  {
+    id: 1,
+    name: "Youth Golf Scholarship Fund",
+    verified: true,
+    category: "Education",
+  },
+  {
+    id: 2,
+    name: "GreenFairways Environmental",
+    verified: true,
+    category: "Environment",
+  },
+  {
+    id: 3,
+    name: "Veteran Caddy Support",
+    verified: false,
+    category: "Social",
+  },
+  {
+    id: 4,
+    name: "Urban Junior Golf Initiative",
+    verified: true,
+    category: "Community",
+  },
+];
+
 function Page() {
-  const [donationPercent, setDonationPercent] = useState(15);
+  const [donationPercent, setDonationPercent] = useState(MIN_DONATION);
   const [selectedCharity, setSelectedCharity] = useState(1);
 
-  const charities = [
-    {
-      id: 1,
-      name: "Youth Golf Scholarship Fund",
-      verified: true,
-      category: "Education",
-    },
-    {
-      id: 2,
-      name: "GreenFairways Environmental",
-      verified: true,
-      category: "Environment",
-    },
-    {
-      id: 3,
-      name: "Veteran Caddy Support",
-      verified: false,
-      category: "Social",
-    },
-    {
-      id: 4,
-      name: "Urban Junior Golf Initiative",
-      verified: true,
-      category: "Community",
-    },
-  ];
+  useEffect(function () {
+    getAllCharities().then((data) => console.log(data));
+  }, []);
+
+  function handleSubmit() {
+    if (!donationPercent || !selectedCharity) return;
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 p-8 lg:p-16 max-w-5xl mx-auto">
@@ -70,51 +81,19 @@ function Page() {
             </span>
           </div>
 
-          {charities.map((charity) => (
-            <div
+          {DUMMY_CHARITIES.map((charity) => (
+            <CharitiCard
               key={charity.id}
-              onClick={() => setSelectedCharity(charity.id)}
-              className={`flex items-center justify-between p-6 cursor-pointer border-b-2 transition-all duration-300 group
-                ${
-                  selectedCharity === charity.id
-                    ? "border-green-600 bg-green-50/30"
-                    : "border-slate-50 hover:border-slate-200"
-                }`}
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`p-3 rounded-full transition-colors 
-                  ${selectedCharity === charity.id ? "bg-green-600 text-white" : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"}`}
-                >
-                  <PiHandHeartFill size={20} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-black text-lg">{charity.name}</h3>
-                    {charity.verified && (
-                      <PiSealCheckFill className="text-blue-500" size={18} />
-                    )}
-                  </div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-tighter">
-                    {charity.category}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                {selectedCharity === charity.id && (
-                  <PiCheckCircleFill className="text-green-600" size={24} />
-                )}
-                <PiCaretRightBold
-                  className={`transition-opacity ${selectedCharity === charity.id ? "opacity-0" : "opacity-20"}`}
-                />
-              </div>
-            </div>
+              charity={charity}
+              selectedCharity={selectedCharity}
+              onSelectCharity={setSelectedCharity}
+            />
           ))}
         </div>
 
         <div className="lg:col-span-2 space-y-12">
           <div>
-            <div className="flex justify-between items-end mb-6">
+            <div className="grid grid-cols-2 items-center mb-6">
               <h3 className="text-sm font-black uppercase tracking-widest text-slate-400">
                 Monthly Contribution
               </h3>
@@ -125,17 +104,17 @@ function Page() {
 
             <input
               type="range"
-              min="15"
-              max="90"
-              step="5"
+              min={`${MIN_DONATION}`}
+              max={`${MAX_DONATION}`}
+              step="1"
               value={donationPercent}
               onChange={(e) => setDonationPercent(e.target.value)}
               className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-green-600"
             />
 
             <div className="flex justify-between mt-4 text-[10px] font-black text-slate-300 uppercase tracking-widest">
-              <span>Min: 15%</span>
-              <span>Max: 90%</span>
+              <span>Min: {MIN_DONATION}%</span>
+              <span>Max: {MAX_DONATION}%</span>
             </div>
 
             <div className="mt-8 flex gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -148,10 +127,12 @@ function Page() {
             </div>
           </div>
 
-          {/* Action Button */}
           <div className="pt-4">
-            <button className="w-full bg-slate-900 text-white py-5 rounded-full font-black text-lg flex items-center justify-center gap-3 hover:bg-green-600 transition-all duration-300 shadow-2xl shadow-slate-200 active:scale-95 group cursor-pointer">
-              Set Impact Strategy{" "}
+            <button
+              className="w-full bg-slate-900 text-white py-5 rounded-full font-black text-lg flex items-center justify-center gap-3 hover:bg-green-600 transition-all duration-300 shadow-2xl shadow-slate-200 active:scale-95 group cursor-pointer"
+              onClick={handleSubmit}
+            >
+              Save Changes
               <PiCheckCircleFill
                 size={22}
                 className="group-hover:scale-110 transition-transform"

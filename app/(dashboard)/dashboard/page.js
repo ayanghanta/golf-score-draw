@@ -1,45 +1,7 @@
+import ActiveCharityDisplayCard from "@/components/dashboard/ActiveCharityDisplayCard";
 import AddGolfScore from "@/components/dashboard/AddGolfScore";
-import {
-  PiArrowRightBold,
-  PiClockCounterClockwiseBold,
-  PiHeartFill,
-  PiPlusCircleBold,
-  PiTrophyBold,
-  PiUserBold,
-} from "react-icons/pi";
-
-const DUMMPY_SCORES = [
-  {
-    date: "Mar 20",
-    course: "Pebble Beach",
-    score: "74",
-    status: "Verified",
-  },
-  {
-    date: "Mar 15",
-    course: "St Andrews",
-    score: "68",
-    status: "Verified",
-  },
-  {
-    date: "Mar 10",
-    course: "Pinehurst No. 2",
-    score: "81",
-    status: "Processing",
-  },
-  {
-    date: "Mar 02",
-    course: "Riviera CC",
-    score: "72",
-    status: "Verified",
-  },
-  {
-    date: "Feb 28",
-    course: "TPC Sawgrass",
-    score: "75",
-    status: "Verified",
-  },
-];
+import DisplayScores from "@/components/dashboard/DisplayScores";
+import { PiTrophyBold, PiUserBold } from "react-icons/pi";
 
 function Page() {
   return (
@@ -80,28 +42,12 @@ function Page() {
           </div>
         </div>
 
-        <div className="border-b-4 border-slate-100 pb-6 group hover:border-green-200 transition-all cursor-pointer">
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="flex items-center gap-2 mb-4 text-slate-400 uppercase text-[11px] font-black tracking-[0.2em]">
-                <PiHeartFill size={18} /> Active Charity
-              </div>
-              <p className="text-2xl font-black text-slate-900">
-                Youth Golf Foundation
-              </p>
-              <p className="text-sm text-slate-400 font-medium">
-                15% of your sub is donated here
-              </p>
-            </div>
-            <button className="text-green-600 font-black text-xs uppercase tracking-widest py-2 px-4 hover:bg-green-50 rounded-full transition">
-              Choose New
-            </button>
-          </div>
-        </div>
+        <ActiveCharityDisplayCard />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-12">
         <AddGolfScore />
+        <DisplayScores />
       </div>
     </>
   );

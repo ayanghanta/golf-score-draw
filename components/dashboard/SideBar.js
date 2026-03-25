@@ -1,15 +1,16 @@
+import Link from "next/link";
 import {
   PiChartBarBold,
-  PiClockCounterClockwiseBold,
   PiGearBold,
   PiGolfFill,
-  PiHandHeartBold,
   PiPlusCircleBold,
   PiQuestionBold,
   PiSignOutBold,
 } from "react-icons/pi";
 
 function SideBar() {
+  const isActive = false; //FIXME:
+
   return (
     <aside className="w-64 border-r border-slate-100 flex flex-col p-6 h-full">
       <div className="flex items-center gap-2 mb-12 px-2">
@@ -17,45 +18,29 @@ function SideBar() {
         <span className="text-xl font-black tracking-tighter">LuckySwing</span>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-2">
-        {[
-          {
-            icon: <PiChartBarBold size={22} />,
-            label: "Overview",
-            active: true,
-          },
-          {
-            icon: <PiPlusCircleBold size={22} />,
-            label: "Add Score",
-            active: false,
-          },
-          {
-            icon: <PiClockCounterClockwiseBold size={22} />,
-            label: "History",
-            active: false,
-          },
-          {
-            icon: <PiHandHeartBold size={22} />,
-            label: "My Charities",
-            active: false,
-          },
-        ].map((item, i) => (
+        <Link href="/dashboard">
           <button
-            key={i}
             className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer
-                  ${item.active ? "bg-green-50 text-green-700" : "text-slate-400 hover:text-slate-900 hover:bg-slate-50"}`}
+            ${isActive ? "bg-green-50 text-green-700" : "text-slate-400 hover:text-slate-900 hover:bg-slate-50"}`}
           >
-            {item.icon} {item.label}
+            <PiChartBarBold size={22} /> Home
           </button>
-        ))}
+        </Link>
+        <button
+          className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer
+                  ${isActive ? "bg-green-50 text-green-700" : "text-slate-400 hover:text-slate-900 hover:bg-slate-50"}`}
+        >
+          <PiPlusCircleBold size={22} /> Add Score
+        </button>
       </nav>
 
-      {/* Sidebar Bottom Actions */}
       <div className="pt-6 border-t border-slate-50 space-y-1">
-        <button className="w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-sm text-slate-400 hover:text-slate-900 transition cursor-pointer">
-          <PiGearBold size={22} /> Account
-        </button>
+        <Link href="/dashboard/myaccount">
+          <button className="w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-sm text-slate-400 hover:text-slate-900 transition cursor-pointer">
+            <PiGearBold size={22} /> Account
+          </button>
+        </Link>
         <button className="w-full flex items-center gap-3 px-3 py-3 rounded-xl font-bold text-sm text-slate-400 hover:text-slate-900 transition cursor-pointer">
           <PiQuestionBold size={22} /> Help Center
         </button>
